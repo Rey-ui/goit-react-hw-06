@@ -1,11 +1,32 @@
 import Contact from "./Contact.jsx";
+import { useDispatch, useSelector } from "react-redux";
 import css from "./ContactList.module.css";
-const ContactList = ({ contacts, onDelete }) => {
+import { getContacts } from "../redux/selectors.js";
+import { useEffect } from "react";
+import { setContacts } from "../redux/contactsSlice";
+//import { INITIAL_STATE } from "../redux/initialState";
+import { getFilter } from "../redux/selectors";
+const ContactList = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const storedContacts = JSON.parse(localStorage.getItem("contacts"));
+    if (storedContacts) {
+      dispatch(setContacts(storedContacts));
+    }
+  }, [dispatch]);
+  const contacts = useSelector(getContacts);
+  const filter = useSelector(getFilter) || "";
+  const filteredContacts = filter
+    ? contacts.filter((contact) =>
+        contact.name.toLowerCase().includes(filter.toLowerCase())
+      )
+    : contacts;
+
   return (
     <ul className={css.contactList}>
-      {contacts.map((contact) => (
+      {filteredContacts.map((contact) => (
         <li className={css.contactItem} key={contact.id}>
-          {<Contact data={contact} onDelete={onDelete} />}
+          {<Contact data={contact} />}
         </li>
       ))}
     </ul>

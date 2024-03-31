@@ -1,4 +1,6 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useDispatch } from "react-redux";
+import { addContact } from "../redux/contactsSlice";
 import * as Yup from "yup";
 import css from "./ContactForm.module.css";
 const FeedbackSchema = Yup.object().shape({
@@ -11,17 +13,21 @@ const FeedbackSchema = Yup.object().shape({
     .max(50, "Too long")
     .required("Required"),
 });
-const ContactForm = ({ addContact }) => {
+const ContactForm = () => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = (values, { resetForm }) => {
+    dispatch(addContact(values.name, values.number));
+    resetForm();
+  };
+
   return (
     <Formik
       initialValues={{
         name: "",
         number: "",
       }}
-      onSubmit={(values, { resetForm }) => {
-        addContact(values);
-        resetForm();
-      }}
+      onSubmit={handleSubmit}
       validationSchema={FeedbackSchema}
     >
       <Form className={css.contactForm}>
