@@ -2,18 +2,18 @@ import Contact from "./Contact.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import css from "./ContactList.module.css";
 import { getContacts } from "../redux/selectors.js";
-import { useEffect } from "react";
-import { setContacts } from "../redux/contactsSlice";
+//import { useEffect } from "react";
+import { selectContacts } from "../redux/contactsSlice";
 //import { INITIAL_STATE } from "../redux/initialState";
 import { getFilter } from "../redux/selectors";
 const ContactList = () => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    const storedContacts = JSON.parse(localStorage.getItem("contacts"));
-    if (storedContacts) {
-      dispatch(setContacts(storedContacts));
-    }
-  }, [dispatch]);
+
+  const storedContacts = JSON.parse(localStorage.getItem("contacts"));
+  if (storedContacts) {
+    dispatch(selectContacts(storedContacts));
+  }
+
   const contacts = useSelector(getContacts);
   const filter = useSelector(getFilter) || "";
   const filteredContacts = filter
