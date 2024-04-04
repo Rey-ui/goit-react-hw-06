@@ -17,7 +17,7 @@ const rootReducer = combineReducers({
   filters: filtersReducer,
 });
 const persistConfig = {
-  key: "contacts",
+  key: "items",
   storage,
   whitelist: ["contacts"],
 };
